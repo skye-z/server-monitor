@@ -46,7 +46,7 @@ func createDefault() {
 	// 服务上报速度(秒)
 	viper.SetDefault("service.rate", "10")
 	// 主控地址
-	viper.SetDefault("master.host", "localhost")
+	viper.SetDefault("master.addr", "localhost")
 	// 主控端口
 	viper.SetDefault("master.port", "12780")
 	// 接入密钥
