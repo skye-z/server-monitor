@@ -1,0 +1,11 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+# product
+server-monitor
+# log file
+smr.log
+# config file
+smc.ini
