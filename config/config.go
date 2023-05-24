@@ -40,6 +40,10 @@ func GetBool(key string) bool {
 	return viper.GetBool(key)
 }
 
+func GetString(key string) string {
+	return viper.GetString(key)
+}
+
 func GetInt(key string) int {
 	return viper.GetInt(key)
 }
@@ -51,6 +55,8 @@ func GetInt32(key string) int32 {
 func createDefault() {
 	// 服务进程号
 	viper.SetDefault("service.pid", "0")
+	// 服务地址
+	viper.SetDefault("service.host", "0.0.0.0")
 	// 服务端口
 	viper.SetDefault("service.port", "12780")
 	// 报送服务故障时最大重启次数

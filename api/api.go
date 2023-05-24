@@ -28,10 +28,11 @@ func RunServer() {
 	handler := http.NewServeMux()
 	handler.HandleFunc("/api/conf", getConfig)
 
+	serHost := config.GetString("service.host")
 	serPort := config.GetInt32("service.port")
 	server = &http.Server{
 		Handler:      handler,
-		Addr:         fmt.Sprintf(":%v", serPort),
+		Addr:         fmt.Sprintf("%s:%v", serHost, serPort),
 		WriteTimeout: 10 * time.Second,
 		ReadTimeout:  10 * time.Second,
 	}
