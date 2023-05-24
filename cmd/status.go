@@ -26,32 +26,58 @@ var statusCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(statusCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// statusCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// statusCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func checkStatus() {
-	var pid = config.GetInt32("service.pid")
+	if config.GetBool("service.delivery") {
+		var pid = config.GetInt32("service.pid")
+		if pid == 0 {
+			deliveryStop()
+			return
+		}
 
-	if pid == 0 {
-		fmt.Println("Service not running")
-		return
+		p, err := process.NewProcess(pid)
+		if err != nil {
+			deliveryStop()
+			config.Set("service.pid", "0")
+			return
+		}
+
+		ppid, _ := p.Ppid()
+		fmt.Println(`Daemon Service		running | pid	`, ppid)
+		fmt.Println(`Delivery Service	running | pid	`, p.Pid)
+
+		if config.GetBool("service.api") {
+			serPort := config.GetInt32("service.port")
+			fmt.Println(`Api Service		running | port	`, serPort)
+		} else {
+			apiDisable()
+		}
+	} else {
+		deliveryDisable()
+		if config.GetBool("service.api") {
+			fmt.Println(`Api Server		enabled`)
+		} else {
+			apiDisable()
+		}
 	}
+}
 
-	p, err := process.NewProcess(pid)
-	if err != nil {
-		fmt.Println("Service not running")
-		config.Set("service.pid", "0")
-		return
+func deliveryStop() {
+	fmt.Println(`Daemon Service		stop`)
+	fmt.Println(`Delivery service	stop`)
+	if config.GetBool("service.api") {
+		fmt.Println(`Api Service		stop`)
+	} else {
+		apiDisable()
 	}
+}
 
-	fmt.Println("Service is running, pid is", p.Pid)
+func deliveryDisable() {
+	fmt.Println(`Daemon Service		stop`)
+	fmt.Println(`Delivery Server		disable`)
+}
+
+func apiDisable() {
+	fmt.Println(`Api Server		disable`)
 }
