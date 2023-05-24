@@ -20,6 +20,7 @@ const ENV_NAME = "BETAX_SMD_IDX"
 var runIdx int = 0
 
 type Daemon struct {
+	Name     string
 	LogFile  string //日志文件, 记录守护进程和子进程的标准输出和错误输出. 若为空则不记录
 	MaxCount int    //循环重启最大次数, 若为0则无限重启
 }
@@ -27,7 +28,7 @@ type Daemon struct {
 // 把本身程序转化为后台运行(启动一个子进程, 然后自己退出)
 // logFile 若不为空,子程序的标准输出和错误输出将记入此文件
 // isExit  启动子加进程后是否直接退出主程序, 若为false, 主程序返回*os.Process, 子程序返回 nil. 需自行判断处理
-func Background(logFile string, isExit bool) (*exec.Cmd, error) {
+func Background(name string, logFile string, isExit bool) (*exec.Cmd, error) {
 	//判断子进程还是父进程
 	runIdx++
 	envIdx, err := strconv.Atoi(os.Getenv(ENV_NAME))
@@ -46,10 +47,10 @@ func Background(logFile string, isExit bool) (*exec.Cmd, error) {
 	//启动子进程
 	cmd, err := startProc(os.Args, env, logFile)
 	if err != nil {
-		log.Println("Service startup failed", err)
+		log.Println("Daemon service startup failed", err)
 		return nil, err
 	} else {
-		log.Println("Service startup success")
+		log.Println("Daemon service startup success")
 		config.Set("service.pid", cmd.Process.Pid)
 	}
 
@@ -60,8 +61,9 @@ func Background(logFile string, isExit bool) (*exec.Cmd, error) {
 	return cmd, nil
 }
 
-func NewDaemon(logFile string) *Daemon {
+func NewDaemon(name string, logFile string) *Daemon {
 	return &Daemon{
+		Name:     name,
 		LogFile:  logFile,
 		MaxCount: 3,
 	}
@@ -70,7 +72,7 @@ func NewDaemon(logFile string) *Daemon {
 // 启动后台守护进程
 func (d *Daemon) Run() {
 	//启动一个守护进程后退出
-	Background(d.LogFile, true)
+	Background(d.Name, d.LogFile, true)
 
 	//守护进程启动一个子进程, 并循环监视
 	var t int64
@@ -86,7 +88,7 @@ func (d *Daemon) Run() {
 		count++
 
 		t = time.Now().Unix() //启动时间戳
-		cmd, err := Background(d.LogFile, false)
+		cmd, err := Background(d.Name, d.LogFile, false)
 		if err != nil { //启动失败
 			log.Println(dInfo, "Service startup failed;", "err:", err)
 			continue
@@ -94,14 +96,14 @@ func (d *Daemon) Run() {
 
 		//子进程,
 		if cmd == nil {
-			log.Printf("Service(%d) running", os.Getpid())
+			log.Printf("%s service running, pid is %d", d.Name, os.Getpid())
 			break
 		}
 
 		//父进程: 等待子进程退出
 		err = cmd.Wait()
 		dat := time.Now().Unix() - t //子进程运行秒数
-		log.Printf("%s Service(%d) shutdown, Running for %d second in total %v\n", dInfo, cmd.ProcessState.Pid(), dat, err)
+		log.Printf("%s %s service(%d) shutdown, Running for %d second in total %v\n", dInfo, d.Name, cmd.ProcessState.Pid(), dat, err)
 	}
 }
 

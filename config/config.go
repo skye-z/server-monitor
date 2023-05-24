@@ -36,6 +36,14 @@ func Set(key string, value interface{}) {
 	viper.WriteConfig()
 }
 
+func GetBool(key string) bool {
+	return viper.GetBool(key)
+}
+
+func GetInt(key string) int {
+	return viper.GetInt(key)
+}
+
 func GetInt32(key string) int32 {
 	return viper.GetInt32(key)
 }
@@ -43,8 +51,16 @@ func GetInt32(key string) int32 {
 func createDefault() {
 	// 服务进程号
 	viper.SetDefault("service.pid", "0")
+	// 服务端口
+	viper.SetDefault("service.port", "12780")
+	// 报送服务故障时最大重启次数
+	viper.SetDefault("service.max-retry", "3")
 	// 服务上报速度(秒)
 	viper.SetDefault("service.rate", "10")
+	// 报送服务开关
+	viper.SetDefault("service.delivery", "true")
+	// 数据接口开关
+	viper.SetDefault("service.api", "true")
 	// 主控地址
 	viper.SetDefault("master.addr", "localhost")
 	// 主控端口
