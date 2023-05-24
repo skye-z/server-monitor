@@ -7,7 +7,7 @@ Copyright © 2023 SkyeZhang <skai-zhang@hotmail.com>
 package cmd
 
 import (
-	"fmt"
+	"log"
 	"server-monitor/config"
 	"time"
 
@@ -21,18 +21,28 @@ var stopCmd = &cobra.Command{
 	Short: "Stop server",
 	Long:  "Stop server monitoring and reporting service",
 	Run: func(cmd *cobra.Command, args []string) {
+		stopServer()
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(stopCmd)
+}
+
+func stopServer() {
+	if config.GetBool("service.delivery") {
 		var pid = config.GetInt32("service.pid")
 		if pid == 0 {
-			fmt.Println("Service not running")
+			log.Println("Delivery service not running")
 			return
 		}
 		p, err := process.NewProcess(pid)
 		if err != nil {
-			fmt.Println("Service not running")
+			log.Println("Delivery service not running")
 			config.Set("service.pid", "0")
 			return
 		}
-		fmt.Println("Service is stopping")
+		log.Println("Delivery service stopping...")
 
 		ppid, _ := p.Ppid()
 		daemon, _ := process.NewProcess(ppid)
@@ -40,10 +50,9 @@ var stopCmd = &cobra.Command{
 		time.Sleep(time.Second * 1)
 		p.Kill()
 
-		fmt.Println("Service stopped")
-	},
-}
-
-func init() {
-	rootCmd.AddCommand(stopCmd)
+		log.Println("Delivery service stopped")
+	}
+	if config.GetBool("service.api") {
+		log.Println("Api service stopped")
+	}
 }
