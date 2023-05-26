@@ -24,6 +24,13 @@ var startCmd = &cobra.Command{
 	Short: "Start server",
 	Long:  "Start server monitoring and reporting service",
 	Run: func(cmd *cobra.Command, args []string) {
+		var pid = config.GetInt32("service.pid")
+		if pid != 0 {
+			log.Println("Delivery service is running")
+			log.Println("Api service is running")
+			return
+		}
+
 		if config.GetBool("service.delivery") {
 			if config.GetBool("service.api") {
 				api.RunServer()
