@@ -15,7 +15,9 @@ Please execute `go mod download` to download dependencies under the project dire
 
 ## Run the code
 
-You cannot use `go run` directly because the project uses a daemon to call the business process, and running it directly will cause an exception; Please [compile and run](#compile-and-package) using the command shown in the last step
+You cannot use `go run` directly because the project uses a daemon to call the business process, and running it directly will cause an exception.
+
+Please [compile and run](#compile-and-package) using the command shown in the last step
 
 ## Compile and package
 
