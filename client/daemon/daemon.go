@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"time"
 
-	"server-monitor/config"
+	"monitor-client/config"
 )
 
 const ENV_NAME = "BETAX_SMD_IDX"

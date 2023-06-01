@@ -8,10 +8,10 @@ package cmd
 
 import (
 	"log"
+	"monitor-client/api"
+	"monitor-client/config"
+	"monitor-client/daemon"
 	"os"
-	"server-monitor/api"
-	"server-monitor/config"
-	"server-monitor/daemon"
 	"strconv"
 	"time"
 

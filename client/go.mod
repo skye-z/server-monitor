@@ -1,4 +1,4 @@
-module server-monitor
+module monitor-client
 
 go 1.20
 

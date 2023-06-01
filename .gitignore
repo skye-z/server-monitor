@@ -4,8 +4,11 @@
 *.so
 *.dylib
 # product
-server-monitor
+monitor-client
+monitor-control
 # log file
 smr.log
+scr.log
 # config file
 smc.ini
+scc.ini

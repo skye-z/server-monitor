@@ -8,7 +8,7 @@ package cmd
 
 import (
 	"fmt"
-	"server-monitor/config"
+	"monitor-client/config"
 
 	"github.com/shirou/gopsutil/v3/process"
 	"github.com/spf13/cobra"

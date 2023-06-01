@@ -8,7 +8,7 @@ package cmd
 
 import (
 	"log"
-	"server-monitor/config"
+	"monitor-client/config"
 	"time"
 
 	"github.com/shirou/gopsutil/v3/process"

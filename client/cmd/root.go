@@ -8,8 +8,8 @@ package cmd
 
 import (
 	"fmt"
+	"monitor-client/config"
 	"os"
-	"server-monitor/config"
 
 	"github.com/spf13/cobra"
 )
@@ -23,7 +23,7 @@ var headLogo = `   ____                       __  ___          _ __
 
 // 没有任何子命令时调用的基本命令
 var rootCmd = &cobra.Command{
-	Use:     "server-monitor",
+	Use:     "monitor-control",
 	Short:   "A server monitoring tool",
 	Version: config.VERSION,
 	Long:    headLogo,

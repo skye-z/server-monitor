@@ -10,9 +10,9 @@ package api
 import (
 	"fmt"
 	"log"
+	"monitor-client/config"
 	"net/http"
 	"os"
-	"server-monitor/config"
 	"strconv"
 	"time"
 )

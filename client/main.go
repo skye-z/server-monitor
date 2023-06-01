@@ -5,8 +5,8 @@ Copyright © 2023 SkyeZhang <skai-zhang@hotmail.com>
 package main
 
 import (
-	"server-monitor/cmd"
-	"server-monitor/config"
+	"monitor-client/cmd"
+	"monitor-client/config"
 )
 
 func main() {
